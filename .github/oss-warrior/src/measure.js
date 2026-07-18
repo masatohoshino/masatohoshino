@@ -46,14 +46,22 @@ export async function measure(login, opts = {}) {
   const internalOwners = [];
   for (const repo of probeList) {
     const [o, n] = repo.split('/');
-    try {
-      const d = await graphql(MPQ, { owner: o, name: n });
-      const hit = (d.repository?.pullRequests.nodes || []).some((x) =>
-        x.mergedBy?.login === login && x.author?.login && x.author.login !== login);
-      if (hit && !ownSet.has(o.toLowerCase()) && !internalOwners.includes(o)) {
-        internalOwners.push(o);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const d = await graphql(MPQ, { owner: o, name: n });
+        const nodes = d.repository?.pullRequests.nodes || [];
+        const hit = nodes.some((x) =>
+          x.mergedBy?.login === login && x.author?.login && x.author.login !== login);
+        log(`merger probe ${repo}: nodes=${nodes.length} hit=${hit}`);
+        if (hit && !ownSet.has(o.toLowerCase()) && !internalOwners.includes(o)) {
+          internalOwners.push(o);
+        }
+        break;
+      } catch (e) {
+        log(`merger probe ${repo} failed (attempt ${attempt + 1}): ${e.message}`);
+        await new Promise((r) => setTimeout(r, 3000));
       }
-    } catch { /* deleted repo etc. */ }
+    }
   }
   if (internalOwners.length) {
     log(`merger rule: internal realms detected: ${internalOwners.join(', ')}`);
