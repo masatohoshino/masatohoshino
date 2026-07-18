@@ -63,13 +63,21 @@ export async function searchPRs(q, maxPages = 10) {
   const items = [];
   let total = 0;
   for (let page = 1; page <= maxPages; page++) {
-    const wait = lastSearch + 2100 - Date.now();
-    if (wait > 0) await sleep(wait);
-    lastSearch = Date.now();
-    const res = await req(
-      `${API}/search/issues?q=${encodeURIComponent(q)}&per_page=100&page=${page}`);
-    const body = await res.json();
-    if (!body.items) throw new Error(`search failed: ${JSON.stringify(body).slice(0, 200)}`);
+    let body = null;
+    // GITHUB_TOKEN gets low search priority: heavy queries can come back
+    // empty with incomplete_results=true — retry rather than trust them.
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const wait = lastSearch + 2100 - Date.now();
+      if (wait > 0) await sleep(wait);
+      lastSearch = Date.now();
+      const res = await req(
+        `${API}/search/issues?q=${encodeURIComponent(q)}&per_page=100&page=${page}`);
+      body = await res.json();
+      if (!body.items) throw new Error(`search failed: ${JSON.stringify(body).slice(0, 200)}`);
+      if (body.items.length > 0 || !body.incomplete_results) break;
+      process.stderr.write(`[gh] search incomplete (page ${page}, attempt ${attempt + 1}), retrying\n`);
+      await sleep(4000 * (attempt + 1));
+    }
     total = body.total_count;
     items.push(...body.items);
     if (body.items.length < 100) break;

@@ -22,6 +22,7 @@ export async function measure(login, opts = {}) {
   // ---- contributor: merged PRs in window ---------------------------------
   log(`contributor: merged PRs ${range}`);
   const merged = await searchPRs(`is:pr author:${login} is:merged merged:${range}`);
+  log(`contributor: search total=${merged.total} fetched=${merged.items.length}`);
   const extRepos = {}; // repo -> {count, mergedAts[]}
   let selfCount = 0;
   for (const it of merged.items) {
