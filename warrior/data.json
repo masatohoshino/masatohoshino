@@ -7,16 +7,16 @@
   "days": 90,
   "norm": 1
  },
- "total": 1707.056496599014,
+ "total": 1707.057155227959,
  "leagues": {
   "contributor": {
-   "power": 1707.056496599014,
+   "power": 1707.057155227959,
    "rank": 2,
    "repos": [
     {
      "repo": "openclaw/openclaw",
      "n": 52,
-     "w": 5.603926697270961
+     "w": 5.603931021567253
     }
    ],
    "wins": 52
@@ -48,7 +48,7 @@
  },
  "affiliation": {
   "repo": "openclaw/openclaw",
-  "stars": 383372,
+  "stars": 383376,
   "role": "CONTRIBUTOR",
   "extraArenas": 0
  },
