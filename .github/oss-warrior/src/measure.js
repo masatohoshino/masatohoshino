@@ -33,12 +33,44 @@ export async function measure(login, opts = {}) {
   const scale = merged.truncated && merged.items.length
     ? merged.total / merged.items.length : 1;
 
+  // ---- merger rule (SPEC §1): repos where the user merges OTHER people's
+  // PRs are internal realms, even when org membership is private
+  // (steipete/openclaw case — no config needed).
+  const probeList = Object.entries(extRepos)
+    .filter(([, v]) => v.count >= 3)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 10).map(([r]) => r);
+  const MPQ = `query($owner:String!,$name:String!){ repository(owner:$owner,name:$name){
+    pullRequests(states:[MERGED], first:40, orderBy:{field:UPDATED_AT, direction:DESC}){
+      nodes{ author{login} mergedBy{login} }}}}`;
+  const internalOwners = [];
+  for (const repo of probeList) {
+    const [o, n] = repo.split('/');
+    try {
+      const d = await graphql(MPQ, { owner: o, name: n });
+      const hit = (d.repository?.pullRequests.nodes || []).some((x) =>
+        x.mergedBy?.login === login && x.author?.login && x.author.login !== login);
+      if (hit && !ownSet.has(o.toLowerCase()) && !internalOwners.includes(o)) {
+        internalOwners.push(o);
+      }
+    } catch { /* deleted repo etc. */ }
+  }
+  if (internalOwners.length) {
+    log(`merger rule: internal realms detected: ${internalOwners.join(', ')}`);
+    for (const o of internalOwners) ownSet.add(o.toLowerCase());
+    for (const repo of Object.keys(extRepos)) {
+      if (isInternal(repo)) { selfCount += extRepos[repo].count; delete extRepos[repo]; }
+    }
+  }
+
   // ---- maintainer: mergedBy over own+org repos (SPEC §8 discovery cap) ---
   log('maintainer: arena discovery');
   const arenas = [];
   const repoLists = [await rest(`/users/${login}/repos?sort=pushed&per_page=100`)];
-  for (const o of [...orgs, ...(opts.ownOrgs || [])]) {
-    repoLists.push(await rest(`/orgs/${o}/repos?sort=pushed&per_page=100`));
+  for (const o of new Set([...orgs, ...(opts.ownOrgs || []), ...internalOwners])) {
+    let r = await rest(`/orgs/${o}/repos?sort=pushed&per_page=100`);
+    if (r.status === 404) r = await rest(`/users/${o}/repos?sort=pushed&per_page=100`);
+    repoLists.push(r);
   }
   for (const { data } of repoLists) {
     for (const r of data || []) {
