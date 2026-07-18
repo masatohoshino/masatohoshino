@@ -1,7 +1,7 @@
-# Scouter on-demand scan — triggered by the console page (issue-ops) or manually.
-# Opens from warrior/site/scouter.html: issue titled "scan: <login>" → this
-# workflow measures the account and replies on the issue with the power card.
-# Never touches the README.
+# Scouter on-demand scans for your profile repo (<you>/<you>):
+# .github/workflows/scouter-scan.yml
+# Visitors use your Pages console (warrior/site/scouter.html) or open an
+# issue titled "scan: <login>" — the scouter replies with the power card.
 name: Scouter scan
 on:
   issues:
@@ -28,17 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: masatohoshino/oss-warrior/scouter@v1
         with:
-          node-version: '20'
-      - name: Install engine deps
-        run: cd .github/oss-warrior && npm ci --no-audit --no-fund
-      - name: Scan target
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          TITLE: ${{ github.event.issue.title }}
-          INPUT_LOGIN: ${{ inputs.login }}
-        run: node .github/oss-warrior/src/scan-issue.js
+          login: ${{ inputs.login }}
       - name: Commit scan assets
         run: |
           git config user.name "oss-warrior[bot]"

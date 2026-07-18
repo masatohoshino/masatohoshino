@@ -1,7 +1,9 @@
-# OSS Warrior — weekly power scan for the profile README.
-# Vendored engine (.github/oss-warrior) until masatohoshino/oss-warrior goes
-# public (private actions cannot be referenced from public repos); then this
-# switches back to `uses: masatohoshino/oss-warrior@v1`.
+# Put this in your PROFILE repo (github.com/<you>/<you>) as
+# .github/workflows/oss-warrior.yml — then your README shows a living
+# warrior card, and tapping it opens a pre-filled X post.
+#
+# One-time: Settings → Pages → Source: "GitHub Actions"
+# (the configure-pages step below also tries to enable it automatically).
 name: OSS Warrior
 on:
   schedule:
@@ -18,27 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: masatohoshino/oss-warrior@v1
+        # with:
+        #   own-orgs: my-private-org
+      - uses: actions/configure-pages@v5
         with:
-          node-version: '20'
-      - name: Install engine deps
-        run: cd .github/oss-warrior && npm ci --no-audit --no-fund
-      - name: Scan and render
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: node .github/oss-warrior/src/action-run.js
-      - name: Commit results
-        run: |
-          git config user.name "oss-warrior[bot]"
-          git config user.email "oss-warrior@users.noreply.github.com"
-          git add warrior README.md
-          if git diff --cached --quiet; then
-            echo "no changes"
-          else
-            git commit -m "⚡ warrior scan $(date -u +%F)"
-            git push
-          fi
+          enablement: true
+        continue-on-error: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: warrior/site
-      - uses: actions/deploy-pages@v4
+      - id: deploy
+        uses: actions/deploy-pages@v4
