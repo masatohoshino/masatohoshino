@@ -1,5 +1,5 @@
 // Collect raw activity for one login across the three leagues (SPEC §1–§2, §7).
-import { rest, graphql, searchPRs, contributorCount, isBot } from './gh.js';
+import { rest, graphql, contributorCount, isBot } from './gh.js';
 
 const iso = (d) => d.toISOString().slice(0, 10);
 
@@ -20,19 +20,47 @@ export async function measure(login, opts = {}) {
   const isInternal = (repo) => ownSet.has(repo.split('/')[0].toLowerCase());
 
   // ---- contributor: merged PRs in window ---------------------------------
+  // GraphQL user traversal, NOT the search API: installation tokens
+  // (Actions GITHUB_TOKEN) scope search to the installed repo only, which
+  // silently returns 0 for other accounts. user.pullRequests works for any
+  // token and carries repository stars in the same payload.
   log(`contributor: merged PRs ${range}`);
-  const merged = await searchPRs(`is:pr author:${login} is:merged merged:${range}`);
-  log(`contributor: search total=${merged.total} fetched=${merged.items.length}`);
+  const PRSQ = `query($login:String!,$cursor:String){ user(login:$login){
+    pullRequests(states:[MERGED], first:100, after:$cursor,
+                 orderBy:{field:UPDATED_AT, direction:DESC}){
+      pageInfo{hasNextPage endCursor}
+      nodes{ mergedAt
+        repository{ nameWithOwner isPrivate stargazerCount owner{login} }}}}}`;
   const extRepos = {}; // repo -> {count, mergedAts[]}
+  const prStars = {};
   let selfCount = 0;
-  for (const it of merged.items) {
-    const repo = it.repository_url.split('/').slice(-2).join('/');
-    if (isInternal(repo)) { selfCount++; continue; }
-    (extRepos[repo] ??= { count: 0, mergedAts: [] }).count++;
-    extRepos[repo].mergedAts.push(it.pull_request?.merged_at || it.closed_at);
+  let fetched = 0;
+  let truncated = false;
+  {
+    let cursor = null;
+    for (let page = 0; page < 30; page++) {
+      const d = await graphql(PRSQ, { login, cursor });
+      const conn = d.user.pullRequests;
+      const inWin = conn.nodes.filter((n) => n.mergedAt && !n.repository.isPrivate
+        && new Date(n.mergedAt) >= from && new Date(n.mergedAt) <= to);
+      fetched += conn.nodes.length;
+      for (const n of inWin) {
+        const repo = n.repository.nameWithOwner;
+        prStars[repo] = n.repository.stargazerCount;
+        if (isInternal(repo)) { selfCount++; continue; }
+        (extRepos[repo] ??= { count: 0, mergedAts: [] }).count++;
+        extRepos[repo].mergedAts.push(n.mergedAt);
+      }
+      // UPDATED_AT is only approximately chronological: stop on a whole page
+      // outside the window, not the first miss
+      if (conn.nodes.length && !inWin.length && page > 0) break;
+      if (!conn.pageInfo.hasNextPage) break;
+      cursor = conn.pageInfo.endCursor;
+      if (page === 29) truncated = true;
+    }
   }
-  const scale = merged.truncated && merged.items.length
-    ? merged.total / merged.items.length : 1;
+  log(`contributor: fetched=${fetched} external repos=${Object.keys(extRepos).length} self=${selfCount}`);
+  const scale = 1; // no search cap; truncation only via page cap (Limit Break)
 
   // ---- merger rule (SPEC §1): repos where the user merges OTHER people's
   // PRs are internal realms, even when org membership is private
@@ -152,8 +180,8 @@ export async function measure(login, opts = {}) {
     ...Object.keys(served).map((k) => k.split('|')[0]),
   ]);
   log(`meta: ${needMeta.size} repos (stars) + C_ext`);
-  const stars = {};
-  const metaList = [...needMeta];
+  const stars = { ...prStars }; // contributor repos carry stars already
+  const metaList = [...needMeta].filter((r) => !(r in stars));
   for (let i = 0; i < metaList.length; i += 40) {
     const batch = metaList.slice(i, i + 40);
     const q = 'query{' + batch.map((r, j) => {
@@ -198,7 +226,7 @@ export async function measure(login, opts = {}) {
 
   return {
     login, avatar, scannedAt: iso(to), window: { from: iso(from), to: iso(to), days: windowDays, norm },
-    contributor: { extRepos, selfCount, scale, truncated: merged.truncated },
+    contributor: { extRepos, selfCount, scale, truncated },
     maintainer: { served, arenasScanned: capped.length },
     solo: { repos: soloRepos, truncated: soloTruncated },
     meta: { stars, cext },
