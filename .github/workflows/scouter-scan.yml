@@ -1,0 +1,65 @@
+# Scouter on-demand scan — triggered by the console page (issue-ops) or manually.
+# Opens from warrior/site/scouter.html: issue titled "scan: <login>" → this
+# workflow measures the account and replies on the issue with the power card.
+# Never touches the README.
+name: Scouter scan
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      login:
+        description: GitHub account to scan
+        required: true
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: scouter-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.issue.title, 'scan:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install engine deps
+        run: cd .github/oss-warrior && npm ci --no-audit --no-fund
+      - name: Scan target
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TITLE: ${{ github.event.issue.title }}
+          INPUT_LOGIN: ${{ inputs.login }}
+        run: node .github/oss-warrior/src/scan-issue.js
+      - name: Commit scan assets
+        run: |
+          git config user.name "oss-warrior[bot]"
+          git config user.email "oss-warrior@users.noreply.github.com"
+          git add warrior
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "🔍 scouter scan"
+            git pull --rebase origin main
+            git push
+          fi
+      - name: Reply on issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE" --body-file warrior/last-scan-comment.md
+          gh issue close "$ISSUE" --reason completed
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: warrior/site
+      - uses: actions/deploy-pages@v4

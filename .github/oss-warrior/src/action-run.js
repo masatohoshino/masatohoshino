@@ -10,7 +10,7 @@ import { score } from './score.js';
 import { card } from './card.js';
 import { table } from './table.js';
 import { renderPng } from './render-png.js';
-import { shareHtml, intentUrl } from './share.js';
+import { shareHtml, intentUrl, scouterConsoleHtml } from './share.js';
 import { updateReadme } from './readme.js';
 
 const repo = process.env.GITHUB_REPOSITORY || '';
@@ -45,6 +45,7 @@ const html = shareHtml(profile, {
 });
 writeFileSync(`warrior/site/share-${date}.html`, html);
 writeFileSync('warrior/site/index.html', html);
+writeFileSync('warrior/site/scouter.html', scouterConsoleHtml({ owner, repoName }));
 
 // scouter: measure other accounts (a failing target never fails the run)
 const targets = (process.env.INPUT_TARGETS || '')
