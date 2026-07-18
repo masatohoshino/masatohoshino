@@ -46,12 +46,41 @@ const html = shareHtml(profile, {
 writeFileSync(`warrior/site/share-${date}.html`, html);
 writeFileSync('warrior/site/index.html', html);
 
+// scouter: measure other accounts (a failing target never fails the run)
+const targets = (process.env.INPUT_TARGETS || '')
+  .split(',').map((s) => s.trim()).filter(Boolean);
+const targetData = [];
+if (targets.length) mkdirSync('warrior/targets', { recursive: true });
+for (const spec of targets) {
+  // "login" or "login:org1|org2" (pin private-org realms, e.g. steipete:openclaw)
+  const [t, orgSpec] = spec.split(':');
+  try {
+    const traw = await measure(t, { days,
+      ownOrgs: (orgSpec || '').split('|').filter(Boolean) });
+    const tprof = score(traw);
+    const tsvg = card(tprof);
+    writeFileSync(`warrior/targets/${t}.svg`, tsvg);
+    writeFileSync(`warrior/site/card-${t}-${date}.png`, renderPng(tsvg));
+    const tShare = `${baseUrl}/scan-${t}-${date}.html`;
+    writeFileSync(`warrior/site/scan-${t}-${date}.html`, shareHtml(tprof, {
+      pngUrl: `${baseUrl}/card-${t}-${date}.png`, shareUrl: tShare, repoUrl,
+      cardSvg: tsvg, scouted: true,
+    }));
+    targetData.push({ login: t, cardPath: `warrior/targets/${t}.svg`,
+      intent: intentUrl(tprof, tShare, { scouted: true }) });
+    console.log(`   scouted ${t}: power ${Math.round(tprof.total).toLocaleString()}`);
+  } catch (e) {
+    console.error(`   target ${t} failed: ${e.message}`);
+  }
+}
+
 const readmePath = process.env.INPUT_README || 'README.md';
 const existing = existsSync(readmePath) ? readFileSync(readmePath, 'utf8') : `# ${login}\n`;
 writeFileSync(readmePath, updateReadme(existing, {
   cardPath: 'warrior/card.svg',
   intent: intentUrl(profile, shareUrl),
   tableMd: md,
+  targets: targetData,
 }));
 
 console.log(`⚡ ${login} — TOTAL POWER ${Math.round(profile.total).toLocaleString()} ` +

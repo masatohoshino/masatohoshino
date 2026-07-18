@@ -26,6 +26,7 @@ jobs:
       - name: Scan and render
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          INPUT_TARGETS: "steipete:openclaw,antfu"
         run: node .github/oss-warrior/src/action-run.js
       - name: Commit results
         run: |

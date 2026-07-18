@@ -2,14 +2,16 @@
 // X unfurls og:image; humans who click through see the card + "measure yours".
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
-export function intentUrl(profile, shareUrl) {
+export function intentUrl(profile, shareUrl, { scouted = false } = {}) {
   const metal = profile.overall ? profile.overall.metal : 'UNRANKED';
-  const text = `⚡ My OSS power level: ${Math.round(profile.total).toLocaleString('en-US')}` +
-    ` — RANK ${metal}\nEvery contribution counts.`;
+  const power = Math.round(profile.total).toLocaleString('en-US');
+  const text = scouted
+    ? `⚡ Scouter reading: ${profile.login} — power ${power}, RANK ${metal}\nEvery contribution counts.`
+    : `⚡ My OSS power level: ${power} — RANK ${metal}\nEvery contribution counts.`;
   return `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
 }
 
-export function shareHtml(profile, { pngUrl, shareUrl, repoUrl, cardSvg }) {
+export function shareHtml(profile, { pngUrl, shareUrl, repoUrl, cardSvg, scouted = false }) {
   const metal = profile.overall ? profile.overall.metal : 'UNRANKED';
   const title = `⚡ ${profile.login} — OSS power ${Math.round(profile.total).toLocaleString('en-US')} (${metal})`;
   const desc = 'Open Source Software Warrior — every contribution counts. ' +
@@ -38,7 +40,7 @@ export function shareHtml(profile, { pngUrl, shareUrl, repoUrl, cardSvg }) {
 </head>
 <body>
 <div class="card">${cardSvg}</div>
-<a class="btn" href="${esc(intentUrl(profile, shareUrl))}">Post to X</a>
+<a class="btn" href="${esc(intentUrl(profile, shareUrl, { scouted }))}">Post to X</a>
 <p>Every figure derives from public GitHub events — reproducible by anyone.<br>
 <a href="${esc(repoUrl)}">⚡ Measure your own power level</a></p>
 </body>
