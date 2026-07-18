@@ -1,0 +1,68 @@
+{
+ "login": "masatohoshino",
+ "scannedAt": "2026-07-18",
+ "window": {
+  "from": "2026-04-19",
+  "to": "2026-07-18",
+  "days": 90,
+  "norm": 1
+ },
+ "total": 1707.053697349999,
+ "leagues": {
+  "contributor": {
+   "power": 1707.053697349999,
+   "rank": 2,
+   "repos": [
+    {
+     "repo": "openclaw/openclaw",
+     "n": 52,
+     "w": 5.60390831853135
+    }
+   ],
+   "wins": 52
+  },
+  "maintainer": {
+   "power": 0,
+   "rank": -1,
+   "repos": [],
+   "servedPRs": 0,
+   "challengers": 0
+  },
+  "solo": {
+   "power": 0,
+   "rank": -1,
+   "repos": [],
+   "commits": 0
+  }
+ },
+ "overall": {
+  "persona": "Mainstay",
+  "metal": "GOLD",
+  "n": 60
+ },
+ "pips": 1,
+ "crowns": 0,
+ "dominant": {
+  "league": "contributor",
+  "metal": "GOLD"
+ },
+ "affiliation": {
+  "repo": "openclaw/openclaw",
+  "stars": 383355,
+  "role": "CONTRIBUTOR",
+  "extraArenas": 0
+ },
+ "badges": [
+  {
+   "n": 52,
+   "text": "arena wins"
+  },
+  {
+   "n": 5,
+   "text": "-week merge streak",
+   "glue": true
+  }
+ ],
+ "honors": [],
+ "persona": "Mainstay"
+}
