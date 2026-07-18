@@ -115,8 +115,8 @@ export function card(p) {
 
   <text x="${W / 2}" y="30" text-anchor="middle" font-family="${MONO}" font-size="9.5"
     font-weight="600" letter-spacing="4" fill="${mix(M.f1, '#8b93a0', 0.72)}">OPEN SOURCE SOFTWARE WARRIOR</text>
-  <line x1="${L}" y1="27" x2="${W / 2 - 128}" y2="27" stroke="${mix(M.rank, '#323a45', 0.5)}" stroke-width="1"/>
-  <line x1="${W / 2 + 128}" y1="27" x2="${R}" y2="27" stroke="${mix(M.rank, '#323a45', 0.5)}" stroke-width="1"/>
+  <line x1="${L}" y1="27" x2="${W / 2 - 168}" y2="27" stroke="${mix(M.rank, '#323a45', 0.5)}" stroke-width="1"/>
+  <line x1="${W / 2 + 168}" y1="27" x2="${R}" y2="27" stroke="${mix(M.rank, '#323a45', 0.5)}" stroke-width="1"/>
 
   ${p.avatar
     ? `<image href="${p.avatar}" x="29" y="43" width="58" height="58" clip-path="url(#ava)"/>`

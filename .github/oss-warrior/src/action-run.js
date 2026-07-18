@@ -82,6 +82,7 @@ writeFileSync(readmePath, updateReadme(existing, {
   intent: intentUrl(profile, shareUrl),
   tableMd: md,
   targets: targetData,
+  scouterUrl: `${baseUrl}/scouter.html`,
 }));
 
 console.log(`⚡ ${login} — TOTAL POWER ${Math.round(profile.total).toLocaleString()} ` +

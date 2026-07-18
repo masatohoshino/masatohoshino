@@ -9,7 +9,7 @@
 const START = '<!-- oss-warrior:start -->';
 const END = '<!-- oss-warrior:end -->';
 
-export function updateReadme(existing, { cardPath, intent, tableMd, targets = [] }) {
+export function updateReadme(existing, { cardPath, intent, tableMd, targets = [], scouterUrl = '' }) {
   const scouter = targets.length ? `
 ### ⚡ Scouter readings
 
@@ -17,9 +17,11 @@ ${targets.map((t) =>
     `<a href="${t.intent}"><img alt="${t.login} warrior card" src="${t.cardPath}" width="320"></a>`)
     .join('\n')}
 ` : '';
+  const entry = scouterUrl
+    ? `\n🔍 [**Scan any GitHub account with the scouter**](${scouterUrl})\n` : '';
   const block = `${START}
 [![OSS Warrior card](${cardPath})](${intent})
-${scouter}
+${entry}${scouter}
 <details><summary>Warrior status details</summary>
 
 ${tableMd}
