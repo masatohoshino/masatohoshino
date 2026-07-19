@@ -1,22 +1,22 @@
 {
  "login": "masatohoshino",
- "scannedAt": "2026-07-18",
+ "scannedAt": "2026-07-19",
  "window": {
-  "from": "2026-04-19",
-  "to": "2026-07-18",
+  "from": "2026-04-20",
+  "to": "2026-07-19",
   "days": 90,
   "norm": 1
  },
- "total": 1707.057155227959,
+ "total": 1829.759654216718,
  "leagues": {
   "contributor": {
-   "power": 1707.057155227959,
+   "power": 1707.0751002451643,
    "rank": 2,
    "repos": [
     {
      "repo": "openclaw/openclaw",
      "n": 52,
-     "w": 5.603931021567253
+     "w": 5.6040488420712276
     }
    ],
    "wins": 52
@@ -29,10 +29,16 @@
    "challengers": 0
   },
   "solo": {
-   "power": 0,
+   "power": 122.68455397155364,
    "rank": -1,
-   "repos": [],
-   "commits": 0
+   "repos": [
+    {
+     "repo": "masatohoshino/oss-warrior",
+     "n": 5,
+     "w": 0.3010299956639812
+    }
+   ],
+   "commits": 15
   }
  },
  "overall": {
@@ -48,14 +54,18 @@
  },
  "affiliation": {
   "repo": "openclaw/openclaw",
-  "stars": 383376,
+  "stars": 383485,
   "role": "CONTRIBUTOR",
-  "extraArenas": 0
+  "extraArenas": 1
  },
  "badges": [
   {
    "n": 52,
    "text": "arena wins"
+  },
+  {
+   "n": 15,
+   "text": "commits shipped"
   },
   {
    "n": 5,
