@@ -1,4 +1,23 @@
-# masatohoshino
+# Masato Hoshino
+
+Automotive software engineer exploring how AI changes open-source software development.
+
+I contribute to [OpenClaw](https://github.com/openclaw/openclaw) and
+[ClawSweeper](https://github.com/openclaw/clawsweeper), with a focus on
+runtime reliability, integrations, review automation, and developer-facing behavior.
+
+→ [Merged OpenClaw contributions](https://github.com/openclaw/openclaw/pulls?q=is%3Apr+author%3Amasatohoshino+is%3Amerged)
+
+I started contributing to open source after discovering OpenClaw.
+Since then, I have been using real upstream work to explore how AI-assisted
+development can make OSS contribution faster and more effective.
+
+While contributing upstream, I am also building and dogfooding contributor tools
+for issue discovery, code review, development orchestration, and validation.
+Some of that tooling is still private while the workflows settle, with the useful
+and reusable parts intended for public release.
+
+
 
 OSS warrior in the openclaw arena.
 
