@@ -3,23 +3,31 @@
 Automotive software engineer exploring how AI changes open-source software development.
 
 I contribute to [OpenClaw](https://github.com/openclaw/openclaw) and
-[ClawSweeper](https://github.com/openclaw/clawsweeper), with a focus on
-runtime reliability, integrations, review automation, and developer-facing behavior.
+[ClawSweeper](https://github.com/openclaw/clawsweeper), focusing on runtime
+reliability, integrations, review automation, and developer-facing behavior.
 
-→ [Merged OpenClaw contributions](https://github.com/openclaw/openclaw/pulls?q=is%3Apr+author%3Amasatohoshino+is%3Amerged)
+**Upstream work:** [OpenClaw](https://github.com/openclaw/openclaw/pulls?q=is%3Apr+author%3Amasatohoshino+is%3Amerged) · [ClawSweeper](https://github.com/openclaw/clawsweeper/pulls?q=is%3Apr+author%3Amasatohoshino+is%3Amerged)
 
-I started contributing to open source after discovering OpenClaw.
+## AI-assisted OSS development
+
+I started contributing to open source after discovering Claude Code and OpenClaw.
+
 Since then, I have been using real upstream work to explore how AI-assisted
 development can make OSS contribution faster and more effective.
 
 While contributing upstream, I am also building and dogfooding contributor tools
 for issue discovery, code review, development orchestration, and validation.
-Some of that tooling is still private while the workflows settle, with the useful
+Some of that tooling is still private while the workflows settle, with useful
 and reusable parts intended for public release.
 
+## Side project
 
+<details>
+<summary><strong>⚡ OSS Warrior — GitHub contribution scouter/game</strong></summary>
 
-OSS warrior in the openclaw arena.
+<br>
+
+Mostly for fun.
 
 <!-- oss-warrior:start -->
 [![OSS Warrior card](warrior/card.svg)](https://x.com/intent/post?text=%E2%9A%A1%20My%20OSS%20power%20level%3A%202%2C851%20%E2%80%94%20RANK%20GOLD%0AEvery%20contribution%20counts.&url=https%3A%2F%2Fmasatohoshino.github.io%2Fmasatohoshino%2Fshare-2026-09-20.html)
@@ -48,3 +56,5 @@ OSS warrior in the openclaw arena.
 
 </details>
 <!-- oss-warrior:end -->
+
+</details>
