@@ -1,4 +1,4 @@
-# Masato Hoshino
+# Hi, I'm Masato
 
 Automotive software engineer exploring how AI changes open-source software development.
 
