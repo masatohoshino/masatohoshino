@@ -2,15 +2,15 @@
 
 | League | Power | Rank | Next rank |
 |---|---:|---|---|
-| CONTRIBUTOR | 2,717 | GOLD (Mainstay) | PLATINUM at 3,700 (73%) |
+| CONTRIBUTOR | 2,380 | GOLD (Mainstay) | PLATINUM at 3,700 (64%) |
 | MAINTAINER | 0 | UNCHARTED | BRONZE at 175 (0%) |
 | SOLO | 123 | UNCHARTED | BRONZE at 175 (70%) |
 
-**TOTAL POWER 2,840** — GOLD · PLATINUM at 3,700 (77%) · window 2026-06-29 → 2026-09-27 (90d-normalized ×1.00)
+**TOTAL POWER 2,503** — GOLD · PLATINUM at 3,700 (68%) · window 2026-07-06 → 2026-10-04 (90d-normalized ×1.00)
 
 
 **Badges**
-- **101** arena wins
+- **75** arena wins
 - **15** commits shipped
 - **14**-week merge streak
 
