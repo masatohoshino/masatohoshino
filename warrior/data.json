@@ -1,35 +1,30 @@
 {
  "login": "masatohoshino",
- "scannedAt": "2026-10-25",
+ "scannedAt": "2026-11-02",
  "window": {
-  "from": "2026-07-27",
-  "to": "2026-10-25",
+  "from": "2026-08-04",
+  "to": "2026-11-02",
   "days": 90,
   "norm": 1
  },
- "total": 2684.113701345824,
+ "total": 2529.9992170788146,
  "leagues": {
   "contributor": {
-   "power": 2684.113701345824,
+   "power": 2529.9992170788146,
    "rank": 2,
    "repos": [
     {
      "repo": "openclaw/openclaw",
-     "n": 79,
-     "w": 5.61505846535576
+     "n": 93,
+     "w": 5.615784925271652
     },
     {
      "repo": "openclaw/gitcrawl",
      "n": 2,
-     "w": 2.99211148778695
-    },
-    {
-     "repo": "openclaw/clawsweeper",
-     "n": 3,
-     "w": 3.703635237583896
+     "w": 2.9934362304976116
     }
    ],
-   "wins": 84
+   "wins": 95
   },
   "maintainer": {
    "power": 0,
@@ -58,13 +53,13 @@
  },
  "affiliation": {
   "repo": "openclaw/openclaw",
-  "stars": 393052,
+  "stars": 393642,
   "role": "CONTRIBUTOR",
-  "extraArenas": 2
+  "extraArenas": 1
  },
  "badges": [
   {
-   "n": 84,
+   "n": 95,
    "text": "arena wins"
   },
   {
