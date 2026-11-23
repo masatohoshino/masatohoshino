@@ -30,7 +30,7 @@ and reusable parts intended for public release.
 Mostly for fun.
 
 <!-- oss-warrior:start -->
-[![OSS Warrior card](warrior/card.svg)](https://x.com/intent/post?text=%E2%9A%A1%20My%20OSS%20power%20level%3A%202%2C853%20%E2%80%94%20RANK%20GOLD%0AEvery%20contribution%20counts.&url=https%3A%2F%2Fmasatohoshino.github.io%2Fmasatohoshino%2Fshare-2026-11-16.html)
+[![OSS Warrior card](warrior/card.svg)](https://x.com/intent/post?text=%E2%9A%A1%20My%20OSS%20power%20level%3A%202%2C820%20%E2%80%94%20RANK%20GOLD%0AEvery%20contribution%20counts.&url=https%3A%2F%2Fmasatohoshino.github.io%2Fmasatohoshino%2Fshare-2026-11-23.html)
 
 🔍 [**Scan any GitHub account with the scouter**](https://masatohoshino.github.io/masatohoshino/scouter.html)
 
@@ -40,15 +40,15 @@ Mostly for fun.
 
 | League | Power | Rank | Next rank |
 |---|---:|---|---|
-| CONTRIBUTOR | 2,853 | GOLD (Mainstay) | PLATINUM at 3,700 (77%) |
+| CONTRIBUTOR | 2,820 | GOLD (Mainstay) | PLATINUM at 3,700 (76%) |
 | MAINTAINER | 0 | UNCHARTED | BRONZE at 175 (0%) |
 | SOLO | 0 | UNCHARTED | BRONZE at 175 (0%) |
 
-**TOTAL POWER 2,853** — GOLD · PLATINUM at 3,700 (77%) · window 2026-08-18 → 2026-11-16 (90d-normalized ×1.00)
+**TOTAL POWER 2,820** — GOLD · PLATINUM at 3,700 (76%) · window 2026-08-25 → 2026-11-23 (90d-normalized ×1.00)
 
 
 **Badges**
-- **123** arena wins
+- **120** arena wins
 - **13**-week merge streak
 
 <sub>Every figure derives from public GitHub events. Formulas: [SPEC](./SPEC.md).</sub>
